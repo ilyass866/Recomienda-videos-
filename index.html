@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es"> 
+ <head> 
+  <meta charset="UTF-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>Recomendador de Videos</title> 
+  <link rel="stylesheet" href="styles.css"> 
+ <style type="text/css" id="dcoder_stylesheet">/* styles.css */
+body {
+  background-color: #121212;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+}
+
+.buttons {
+  margin-bottom: 20px;
+}
+
+button {
+  background-color: #1f1f1f;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #333333;
+}
+
+#video-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.video {
+  width: 300px;
+}</style></head> 
+ <body> 
+  <h1>Recomendador de Videos</h1> 
+  <div class="buttons"> <button onclick="loadVideos('10')">Música</button> <button onclick="loadVideos('17')">Deportes</button> <button onclick="loadVideos('20')">Juegos</button> <button onclick="loadVideos('24')">Entretenimiento</button> 
+  </div> 
+  <div id="video-container"></div> 
+  <script src="script.js"></script> 
+ 
+<script type="text/javascript" id="dcoder_script">// script.js
+
+const apiKey = AIzaSyAxdrvj1v-nhIGBvdXgOVvUBvtEYSjPCN4; // Reemplaza con tu clave de API de YouTube
+
+function loadVideos(categoryId) {
+  const videoContainer = document.getElementById('video-container');
+  videoContainer.innerHTML = ''; // Limpiar videos anteriores
+
+  fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=ES&videoCategoryId=${categoryId}&maxResults=6&key=${apiKey}`)
+    .then(response => response.json())
+    .then(data => {
+      data.items.forEach(video => {
+        const videoDiv = document.createElement('div');
+        videoDiv.classList.add('video');
+        videoDiv.innerHTML = `
+          <iframe width="100%" height="200" src="https://www.youtube.com/embed/${video.id}" frameborder="0" allowfullscreen></iframe>
+          <p>${video.snippet.title}</p>
+        `;
+        videoContainer.appendChild(videoDiv);
+      });
+    })
+    .catch(error => {
+      console.error('Error al cargar los videos:', error);
+    });
+}</script></body></html>
